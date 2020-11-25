@@ -49,6 +49,17 @@ class MyHomePage extends StatefulWidget {
 class _MyHomePageState extends State<MyHomePage> {
   int _counter = 0;
 
+  @override
+  void initState() {
+    super.initState();
+
+    Timer.periodic(Duration(seconds: 1), (timer) {
+      _incrementCounter();
+      print(123);
+    });
+
+  }
+
   void _incrementCounter() {
     setState(() {
       // This call to setState tells the Flutter framework that something has
@@ -68,10 +79,6 @@ class _MyHomePageState extends State<MyHomePage> {
     // The Flutter framework has been optimized to make rerunning build methods
     // fast, so that you can just rebuild anything that needs updating rather
     // than having to individually change instances of widgets.
-
-    Timer.periodic(Duration(seconds: 1), (_) {
-      _incrementCounter();
-    });
 
     return Scaffold(
       appBar: AppBar(
