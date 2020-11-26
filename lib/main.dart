@@ -1,7 +1,9 @@
-import 'package:flutter/material.dart';
 import 'dart:async';
-import 'icon/clicker_icons.dart';
-import 'data/clicker_record.dart';
+import 'package:flutter/material.dart';
+import "package:clicker/clicker.dart";
+
+// import 'icon/clicker_icons.dart';
+// import 'data/clicker_record.dart';
 
 
 void main() {
@@ -39,12 +41,12 @@ class _ClickerHomePageState extends State<ClickerHomePage> {
   void initState() {
     super.initState();
     
-    resourceNames.forEach((name) =>
+    Clicker.names.forEach((name) =>
       widget._resourceButtonMap[name] = FloatingActionButton.extended(
         heroTag: "btn${name}",
         tooltip: name,
-        icon: Icon(ClickerIcon.icon(name)),
-        label: Text('${ClickerRecords().resource(name)}'),
+        icon: Icon(Clicker.icon(name)),
+        label: Text('${Clicker.records.resource(name)}'),
         onPressed: _pushResource(name),
       )
     );
@@ -61,19 +63,19 @@ class _ClickerHomePageState extends State<ClickerHomePage> {
     });
   }
 
-  Widget _resourcePage(name) {
+  Widget _resourceBody(name) {
     return Center(
-      child:Text('${name}:${ClickerRecords().resource(name)}')
+      child:Text('${name}:${Clicker.records.resource(name)}')
     );
   }
 
-  List<Widget> _buttonWithout(name) {
-    return resourceNames.where((x) => x != name).expand(
+  List<Widget> _buttonListWithout(name) {
+    return Clicker.names.where((x) => x != name).expand(
       (x) => [
         widget._resourceButtonMap[x],
         SizedBox(height: 10),
       ],
-    ).toList();
+    ).toList().cast<Widget>();
   }
 
   Function _pushResource(name) {
@@ -83,12 +85,17 @@ class _ClickerHomePageState extends State<ClickerHomePage> {
           builder: (BuildContext context) {
             return Scaffold(
               appBar: AppBar(
-                title: Text(name),
+                title: Row(
+                  children: <Widget>[
+                    Icon(Clicker.icon(name)),
+                    Text(' $name'),
+                  ],
+                ),
               ),
-              body: _resourcePage(name),
+              body: _resourceBody(name),
               floatingActionButton: Column(
                 mainAxisSize: MainAxisSize.min,
-                children: _buttonWithout(name),
+                children: _buttonListWithout(name),
               ),
             );
           }
@@ -102,6 +109,9 @@ class _ClickerHomePageState extends State<ClickerHomePage> {
     return Scaffold(
       appBar: AppBar(
         title: Text(widget.title),
+      ),  
+      drawer: Drawer(
+        child: Center(child: Text('This is a drawer!'))
       ),
       body: Center(
         child: Column(
@@ -119,11 +129,11 @@ class _ClickerHomePageState extends State<ClickerHomePage> {
       ),
       floatingActionButton: Column(
         mainAxisSize: MainAxisSize.min,
-        children: resourceNames.expand(
+        children: Clicker.names.expand(
           (name) => [
             widget._resourceButtonMap[name],
             SizedBox(height: 10),
-          ]).toList(),
+          ]).toList().cast<Widget>(),
       ),
     );
   }

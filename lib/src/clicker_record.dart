@@ -1,11 +1,7 @@
+part of clicker;
 
-const resourceNames = <String>[
-    "apple",
-    "gold",
-  ];
-
-class ClickerRecords {
-  static final _record = ClickerRecords._internal();
+class _Records {
+  static final _record = _Records._internal();
   
   
   final _resource = <String, _BigInt>{};
@@ -14,12 +10,12 @@ class ClickerRecords {
   get resource => (String name) => _resource[name];
   get miner => (String name) => _miner[name];
 
-  factory ClickerRecords() {
+  factory _Records() {
     return _record;
   }
 
-  ClickerRecords._internal() {
-    for (var name in resourceNames) {
+  _Records._internal() {
+    for (var name in Clicker.names) {
       _resource[name] = _BigInt();
       _miner[name] = _BigInt();
     }

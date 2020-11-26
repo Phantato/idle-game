@@ -17,18 +17,10 @@
 ///         License:   SIL (http://scripts.sil.org/OFL)
 ///         Homepage:  http://nagoshiashumari.github.io/Rpg-Awesome/
 ///
-import 'package:flutter/widgets.dart';
+part of clicker;
 
-class ClickerIcon {
-  static const _iconMap = {
-    "apple" : _Clicker.apple,
-    "gold" : _Clicker.gold_bar,
-  };
-  static get icon => (String name) => _iconMap[name];
-}
-
-class _Clicker {
-  _Clicker._();
+class _Icons {
+  _Icons._();
 
   static const _kFontFam = 'Clicker';
   static const _kFontPkg = null;
