@@ -7,9 +7,9 @@ class _Records {
   final _resource = <String, _BigInt>{};
   final _miner = <String, _BigInt>{};
 
-  get resource => (String name) => _resource[name];
+  get numberOf => (String name) => _resource[name];
   get miner => (String name) => _miner[name];
-
+  get increase => (String name) => _resource[name] += _BigInt(1);
   factory _Records() {
     return _record;
   }
@@ -24,8 +24,9 @@ class _Records {
 
 class _BigInt {
 
-  BigInt value;
-  _BigInt([num value=0]) : this.value = BigInt.from(value);
+  BigInt _value;
+  _BigInt([num value=0]) : _value = BigInt.from(value);
+  _BigInt.parse(String value) : _value = BigInt.parse(value);
   
   String _generateUnit(int n) {
     String ret = '';
@@ -37,13 +38,13 @@ class _BigInt {
     return ret.split('').reversed.join('');
   }
 
-  @override  
   String toString() {  
-    String str = '$value';  
+    String str = '$_value';  
     int len = str.length;
     int digitShowed = len % 3 != 0 ? len % 3 : 3;
-    return len <= 3 ? '$value' :
-      '$value'.substring(0, digitShowed) + '.' + '$value'[digitShowed] + _generateUnit(len ~/ 3);
+    return len <= 3 ? str :
+      str.substring(0, digitShowed) + '.' + str[digitShowed] + _generateUnit(len ~/ 3);
   }
+  _BigInt operator+(_BigInt other) => _BigInt.parse('${_value + other._value}');
 }
 
