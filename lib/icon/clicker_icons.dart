@@ -19,8 +19,16 @@
 ///
 import 'package:flutter/widgets.dart';
 
-class Clicker {
-  Clicker._();
+class ClickerIcon {
+  static const _iconMap = {
+    "apple" : _Clicker.apple,
+    "gold" : _Clicker.gold_bar,
+  };
+  static get icon => (String name) => _iconMap[name];
+}
+
+class _Clicker {
+  _Clicker._();
 
   static const _kFontFam = 'Clicker';
   static const _kFontPkg = null;
