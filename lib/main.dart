@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
+import 'icon/clicker_icons.dart';
 
 void main() {
   runApp(MyApp());
@@ -10,7 +11,7 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
-      title: 'Flutter Demo',
+      title: 'Clicker',
       theme: ThemeData(
         // This is the theme of your application.
         //
@@ -55,10 +56,11 @@ class _MyHomePageState extends State<MyHomePage> {
 
     Timer.periodic(Duration(seconds: 1), (timer) {
       _incrementCounter();
-      print(123);
     });
 
   }
+
+  int test() => 1;
 
   void _incrementCounter() {
     setState(() {
@@ -116,11 +118,24 @@ class _MyHomePageState extends State<MyHomePage> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        onPressed: _incrementCounter,
-        tooltip: 'Increment',
-        child: Icon(Icons.add),
-      ), // This trailing comma makes auto-formatting nicer for build methods.
+      floatingActionButton: Column(
+        mainAxisSize: MainAxisSize.min,
+        children: <Widget>[
+          FloatingActionButton.extended(
+            onPressed: _incrementCounter,
+            tooltip: 'Apple',
+            icon: Icon(Clicker.apple),
+            label: Text('$_counter'),
+          ),
+          SizedBox(height: 10),
+          FloatingActionButton.extended(
+            onPressed: _incrementCounter,
+            tooltip: 'Gold',
+            icon: Icon(Clicker.gold_bar),
+            label: Text('${test()}'),
+          ),
+        ],
+      ),
     );
   }
 }
