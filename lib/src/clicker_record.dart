@@ -23,16 +23,27 @@ class _Records {
 }
 
 class _BigInt {
-  int value;
-  
-  _BigInt([this.value = 100]);
 
-  String toString() => value.toString();
+  BigInt value;
+  _BigInt([num value=0]) : this.value = BigInt.from(value);
+  
+  String _generateUnit(int n) {
+    String ret = '';
+    while (n > 0) {
+      --n;  
+      ret += String.fromCharCode(n % 26 + 'a'.codeUnitAt(0));
+      n ~/= 26;
+    }
+    return ret.split('').reversed.join('');
+  }
 
   @override  
-  _BigInt operator+(int i) {
-    value += i;
-    return this;
+  String toString() {  
+    String str = '$value';  
+    int len = str.length;
+    int digitShowed = len % 3 != 0 ? len % 3 : 3;
+    return len <= 3 ? '$value' :
+      '$value'.substring(0, digitShowed) + '.' + '$value'[digitShowed] + _generateUnit(len ~/ 3);
   }
 }
 

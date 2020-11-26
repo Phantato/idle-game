@@ -24,12 +24,9 @@ class ClickerApp extends StatelessWidget {
 }
 
 class ClickerHomePage extends StatefulWidget {
-
   final String title;
   var _resourceButtonMap = <String, Widget>{};
-
   ClickerHomePage({Key key, this.title}) : super(key: key);
-
   @override
   _ClickerHomePageState createState() => _ClickerHomePageState();
 }
@@ -59,7 +56,7 @@ class _ClickerHomePageState extends State<ClickerHomePage> {
 
   void _incrementCounter() {
     setState(() {
-      _counter++;
+      ++_counter;
     });
   }
 

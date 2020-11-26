@@ -7,6 +7,7 @@ class Clicker {
   static const _nameIconPair = {
     'apple' : _Icons.apple,
     'gold' : _Icons.gold_bar,
+    // 'beer' : _Icons.beer,
   };
   static get icon => (String name) => _nameIconPair[name];
   static get names => _nameIconPair.keys;
