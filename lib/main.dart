@@ -1,12 +1,14 @@
 import 'package:flutter/material.dart';
 import 'dart:async';
 import 'icon/clicker_icons.dart';
+import 'data/record.dart';
+
 
 void main() {
-  runApp(MyApp());
+  runApp(ClickerApp());
 }
 
-class MyApp extends StatelessWidget {
+class ClickerApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
@@ -125,14 +127,14 @@ class _MyHomePageState extends State<MyHomePage> {
             onPressed: _incrementCounter,
             tooltip: 'Apple',
             icon: Icon(Clicker.apple),
-            label: Text('$_counter'),
+            label: Text('${ResourceRecords.apple}'),
           ),
           SizedBox(height: 10),
           FloatingActionButton.extended(
             onPressed: _incrementCounter,
             tooltip: 'Gold',
             icon: Icon(Clicker.gold_bar),
-            label: Text('${test()}'),
+            label: Text('${ResourceRecords.gold}'),
           ),
         ],
       ),
