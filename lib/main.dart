@@ -34,6 +34,11 @@ int _counter = 0;
 void _incrementCounter(State<ClickerHomePage> state) {
   state.setState(() {
     Clicker.records.increase('gold');
+    Clicker.records.increase('beer');
+    Clicker.records.increase('beer');
+    Clicker.records.increase('apple');
+    Clicker.records.increase('apple');
+    Clicker.records.increase('apple');
   });
 }
 
@@ -90,8 +95,7 @@ class _ClickerHomePageState extends State<ClickerHomePage> {
 }
 
 class ResourceColumn extends StatefulWidget {
-  var _resourceButtonMap = <String, Widget>{};
-  String excludedName;
+  final String excludedName;
   ResourceColumn() : excludedName='';
   ResourceColumn.without(this.excludedName);
   @override
@@ -99,7 +103,8 @@ class ResourceColumn extends StatefulWidget {
 }
 
 class _ResourceColumnState extends State<ResourceColumn> {
-
+  Timer timer;
+  var _resourceButtonMap = <String, Widget>{};
   Widget _resourceBody(name) {
     Clicker.records.increase(name);
     return ListView.builder(
@@ -151,11 +156,24 @@ class _ResourceColumnState extends State<ResourceColumn> {
       );
     };
   }
+  @override
+  void initState() {
+    super.initState();
 
+    timer = Timer.periodic(Duration(seconds: 1), (timer) {
+      setState(()=>{});
+    });
+  }
+  @override
+  void dispose() {
+    super.dispose();
+
+    timer.cancel();
+  }
   @override
   Widget build(BuildContext context) {
     Clicker.names.where((x) => x != widget.excludedName).forEach((name) =>
-      widget._resourceButtonMap[name] = FloatingActionButton.extended(
+      _resourceButtonMap[name] = FloatingActionButton.extended(
         heroTag: "btn${name}",
         tooltip: name,
         icon: Icon(Clicker.iconOf(name)),
@@ -168,7 +186,7 @@ class _ResourceColumnState extends State<ResourceColumn> {
         mainAxisSize: MainAxisSize.min,
         children: Clicker.names.where((x) => x != widget.excludedName).expand(
           (name) => [
-            widget._resourceButtonMap[name],
+            _resourceButtonMap[name],
             SizedBox(height: 10),
           ]).toList().cast<Widget>(),
     );
