@@ -5,7 +5,7 @@ import 'package:clicker/clicker_ui.dart';
 // import 'icon/clicker_icons.dart';
 // import 'data/clicker_record.dart';
 
-
+Timer _timer;
 void main() {
   runApp(ClickerApp());
 }
@@ -29,23 +29,34 @@ class ClickerHomePage extends StatefulWidget {
   @override
   _ClickerHomePageState createState() => _ClickerHomePageState();
 }
-int _counter = 0;
 
-
-class _ClickerHomePageState extends State<ClickerHomePage> {
-
+class _ClickerHomePageState extends State<ClickerHomePage>
+    with SingleTickerProviderStateMixin {
   int _timeCounter;
+  AnimationController _animationController;
+
   @override
   void initState() {
     super.initState();
 
     _timeCounter = 0;
-    Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
       _incrementCounter();
     });
-
+    _animationController = AnimationController(
+      vsync: this,
+      duration: Duration(milliseconds: 500),
+    );
   }
-  
+
+  @override
+  void dispose() {
+    super.dispose();
+
+    if (_timer.isActive) _timer.cancel();
+    _animationController.dispose();
+  }
+
   void _incrementCounter() {
     setState(() {
       Clicker.records.increase('gold');
@@ -61,22 +72,34 @@ class _ClickerHomePageState extends State<ClickerHomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(
-        title: Text(widget.title),
-      ),  
-      drawer: Drawer(
-        child: Center(child: Text('This is a drawer!'))
-      ),
+      appBar: AppBar(title: Text(widget.title)),
+      drawer: Drawer(child: Center(child: Text('This is a drawer!'))),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
-            Text(
-              'Time have passed:',
-            ),
+            Text('Time have passed:'),
             Text(
               '$_timeCounter s',
               style: Theme.of(context).textTheme.headline4,
+            ),
+            TextButton(
+              child: AnimatedIcon(
+                icon: AnimatedIcons.pause_play,
+                progress: _animationController,
+              ),
+              onPressed: () {
+                _timer.isActive
+                    ? _animationController.forward()
+                    : _animationController.reverse();
+                if (_timer.isActive) {
+                  _timer.cancel();
+                } else {
+                  _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+                    _incrementCounter();
+                  });
+                }
+              },
             )
           ],
         ),
