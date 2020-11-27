@@ -36,7 +36,7 @@ class _MinerListState extends State<_MinerList> {
               crossAxisAlignment: CrossAxisAlignment.baseline,
               textBaseline: TextBaseline.alphabetic,
               children: <Widget>[
-                Text('Basic miner'),
+                Text('Lazy miner'),
                 Expanded(
                   child: Row(),
                 ),
