@@ -28636,7 +28636,7 @@ q=$.kK()
 p=m.a.c
 j=Q.a1v(i,new S.UN(m),T.m4(H.c([s,r,N.Sa(new S.UO(),q.a.h(0,p),k)],j),C.ha,C.bZ,C.u))
 k=j}else{i=L.wS(C.aw.h(0,i.c))
-s=L.eX("Lazy miner",l)
+s=L.eX("Lazy worker",l)
 r=T.YX(T.m4(C.p8,C.ci,C.bZ,l))
 q=$.kK()
 p=m.a.c
