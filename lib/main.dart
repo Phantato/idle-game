@@ -68,7 +68,7 @@ class _ClickerHomePageState extends State<ClickerHomePage>
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(widget.title)),
-      drawer: Drawer(child: Center(child: Text('This is a drawer!'))),
+      // drawer: Drawer(child: Center(child: Text('This is a drawer!'))),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
