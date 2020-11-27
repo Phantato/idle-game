@@ -4,8 +4,8 @@ class _Records {
   static final _record = _Records._internal();
 
   final _resourceTabel = <String, ValueNotifier<_BigInt>>{};
-  final _minerListTabel = <String, List<ValueNotifier<_BigInt>>>{};
-  final _minerCostListTabel = <String, List<ValueNotifier<_BigInt>>>{};
+  final _workerListTabel = <String, List<ValueNotifier<_BigInt>>>{};
+  final _workerCostListTabel = <String, List<ValueNotifier<_BigInt>>>{};
   factory _Records() {
     return _record;
   }
@@ -13,20 +13,20 @@ class _Records {
   _Records._internal() {
     Clicker.names.forEach((name) {
       _resourceTabel[name] = ValueNotifier<_BigInt>(_BigInt.zero);
-      _minerListTabel[name] = <ValueNotifier<_BigInt>>[];
-      _minerListTabel[name].add(ValueNotifier(_BigInt.zero));
-      _minerCostListTabel[name] = <ValueNotifier<_BigInt>>[];
-      _minerCostListTabel[name].add(ValueNotifier(_BigInt(10)));
+      _workerListTabel[name] = <ValueNotifier<_BigInt>>[];
+      _workerListTabel[name].add(ValueNotifier(_BigInt.zero));
+      _workerCostListTabel[name] = <ValueNotifier<_BigInt>>[];
+      _workerCostListTabel[name].add(ValueNotifier(_BigInt(10)));
     });
   }
 
   ValueNotifier<_BigInt> numberOf(String name) => _resourceTabel[name];
-  ValueNotifier<_BigInt> minerOfAt(String name, int index) =>
-      _minerListTabel[name][index];
-  ValueNotifier<_BigInt> minerCostOfAt(String name, int index) =>
-      _minerCostListTabel[name][index];
-  List<ValueNotifier<_BigInt>> minerListOf(String name) =>
-      _minerListTabel[name];
+  ValueNotifier<_BigInt> workerOfAt(String name, int index) =>
+      _workerListTabel[name][index];
+  ValueNotifier<_BigInt> workerCostOfAt(String name, int index) =>
+      _workerCostListTabel[name][index];
+  List<ValueNotifier<_BigInt>> workerListOf(String name) =>
+      _workerListTabel[name];
 
   void increase(String name) {
     increaseBy(name, _BigInt.one);
@@ -45,8 +45,8 @@ class _Records {
   }
 
   void _increaseMinerOfBy(String name, int index, _BigInt value) {
-    _minerListTabel[name][index].value += value;
-    _minerCostListTabel[name][index].value += value * _BigInt(10);
+    _workerListTabel[name][index].value += value;
+    _workerCostListTabel[name][index].value += value * _BigInt(10);
     Clicker._increaser.regist(name, index, value);
   }
 }

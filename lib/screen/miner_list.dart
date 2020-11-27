@@ -36,26 +36,26 @@ class _MinerListState extends State<_MinerList> {
               crossAxisAlignment: CrossAxisAlignment.baseline,
               textBaseline: TextBaseline.alphabetic,
               children: <Widget>[
-                Text('Lazy miner'),
+                Text('Lazy worker'),
                 Expanded(
                   child: Row(),
                 ),
                 ValueListenableBuilder(
                   builder: (context, value, child) => Text('Cost: $value'),
                   valueListenable:
-                      Clicker.records.minerCostOfAt(widget.name, index - 1),
+                      Clicker.records.workerCostOfAt(widget.name, index - 1),
                 ),
                 VerticalDivider(),
                 ValueListenableBuilder(
                   builder: (context, value, child) => Text('Current: $value'),
                   valueListenable:
-                      Clicker.records.minerOfAt(widget.name, index - 1),
+                      Clicker.records.workerOfAt(widget.name, index - 1),
                 ),
               ],
             ),
             onTap: () {
               if (Clicker.records.numberOf(widget.name).value <
-                  Clicker.records.minerCostOfAt(widget.name, index - 1).value)
+                  Clicker.records.workerCostOfAt(widget.name, index - 1).value)
                 Scaffold.of(context).showSnackBar(SnackBar(
                   content: Text('Insufficient resource!'),
                 ));
@@ -63,7 +63,7 @@ class _MinerListState extends State<_MinerList> {
                 Clicker.records.decreaseBy(
                     widget.name,
                     Clicker.records
-                        .minerCostOfAt(widget.name, index - 1)
+                        .workerCostOfAt(widget.name, index - 1)
                         .value);
                 Clicker.records.increaseMinerOf(widget.name, index - 1);
               }
@@ -74,7 +74,7 @@ class _MinerListState extends State<_MinerList> {
   @override
   Widget build(BuildContext context) {
     return ListView.separated(
-      itemCount: Clicker.records.minerListOf(widget.name).length + 1,
+      itemCount: Clicker.records.workerListOf(widget.name).length + 1,
       itemBuilder: _itemBuild,
       separatorBuilder: (c, i) => Divider(),
     );
