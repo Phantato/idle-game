@@ -59,12 +59,7 @@ class _ClickerHomePageState extends State<ClickerHomePage>
 
   void _incrementCounter() {
     setState(() {
-      Clicker.records.increase('gold');
-      Clicker.records.increase('beer');
-      Clicker.records.increase('beer');
-      Clicker.records.increase('apple');
-      Clicker.records.increase('apple');
-      Clicker.records.increase('apple');
+      Clicker.schedule();
       ++_timeCounter;
     });
   }

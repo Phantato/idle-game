@@ -1,11 +1,12 @@
 part of clicker;
 
 class _BigInt {
-  BigInt _value;
-  _BigInt([num value = 0]) : _value = BigInt.from(value);
+  final BigInt _value;
+  _BigInt(num value) : _value = BigInt.from(value);
   _BigInt.from(this._value);
   static _BigInt get one => _BigInt(1);
-  // static _BigInt get zero => _BigInt(0);
+  static _BigInt get zero => _BigInt(0);
+  int get hashCode => _value.hashCode;
   String _generateUnit(int n) {
     String ret = '';
     while (n > 0) {
@@ -29,5 +30,10 @@ class _BigInt {
   }
 
   _BigInt operator +(_BigInt other) => _BigInt.from(_value + other._value);
+  _BigInt operator -(_BigInt other) => _BigInt.from(_value - other._value);
   _BigInt operator *(_BigInt other) => _BigInt.from(_value * other._value);
+
+  bool operator <(_BigInt other) => _value < other._value;
+  // @override
+  // bool operator ==(_BigInt other) => _value == other._value;
 }

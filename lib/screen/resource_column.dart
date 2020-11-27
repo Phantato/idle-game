@@ -17,12 +17,10 @@ class _ResourceColumnState extends State<ResourceColumn> {
         MaterialPageRoute<void>(builder: (BuildContext context) {
           return Scaffold(
             appBar: AppBar(
-              title: Row(
-                children: <Widget>[
-                  Icon(Clicker.iconOf(name)),
-                  Text(' $name'),
-                ],
-              ),
+              title: Row(children: <Widget>[
+                Icon(Clicker.iconOf(name)),
+                Text(' $name'),
+              ]),
             ),
             body: _MinerList(name: name),
             floatingActionButton: ResourceColumn.without(name),
