@@ -1,7 +1,7 @@
 import 'dart:async';
 import 'package:flutter/material.dart';
 import "package:clicker/clicker.dart";
-
+import 'package:clicker/clicker_ui.dart';
 // import 'icon/clicker_icons.dart';
 // import 'data/clicker_record.dart';
 
@@ -31,40 +31,32 @@ class ClickerHomePage extends StatefulWidget {
 }
 int _counter = 0;
 
-void _incrementCounter(State<ClickerHomePage> state) {
-  state.setState(() {
-    Clicker.records.increase('gold');
-    Clicker.records.increase('beer');
-    Clicker.records.increase('beer');
-    Clicker.records.increase('apple');
-    Clicker.records.increase('apple');
-    Clicker.records.increase('apple');
-  });
-}
 
 class _ClickerHomePageState extends State<ClickerHomePage> {
 
+  int _timeCounter;
   @override
   void initState() {
     super.initState();
 
+    _timeCounter = 0;
     Timer.periodic(Duration(seconds: 1), (timer) {
-      _incrementCounter(this);
+      _incrementCounter();
     });
 
   }
-
-
-
-  // List<Widget> _buttonListWithout(name) {
-  //   return Clicker.names.where((x) => x != name).expand(
-  //     (x) => [
-  //       widget._resourceButtonMap[x],
-  //       SizedBox(height: 10),
-  //     ],
-  //   ).toList().cast<Widget>();
-  // }
-
+  
+  void _incrementCounter() {
+    setState(() {
+      Clicker.records.increase('gold');
+      Clicker.records.increase('beer');
+      Clicker.records.increase('beer');
+      Clicker.records.increase('apple');
+      Clicker.records.increase('apple');
+      Clicker.records.increase('apple');
+      ++_timeCounter;
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -80,115 +72,16 @@ class _ClickerHomePageState extends State<ClickerHomePage> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(
-              'You have clicked the button this many times:',
+              'Time have passed:',
             ),
             Text(
-              '$_counter',
+              '$_timeCounter s',
               style: Theme.of(context).textTheme.headline4,
-            ),
+            )
           ],
         ),
       ),
       floatingActionButton: ResourceColumn(),
-    );
-  }
-}
-
-class ResourceColumn extends StatefulWidget {
-  final String excludedName;
-  ResourceColumn() : excludedName='';
-  ResourceColumn.without(this.excludedName);
-  @override
-  _ResourceColumnState createState() => _ResourceColumnState();
-}
-
-class _ResourceColumnState extends State<ResourceColumn> {
-  Timer timer;
-  var _resourceButtonMap = <String, Widget>{};
-  Widget _resourceBody(name) {
-    Clicker.records.increase(name);
-    return ListView.builder(
-      itemCount: 3,
-      itemBuilder: (context, i) {
-        if (i == 0) {
-          return ListTile(
-            leading: Icon(Clicker.iconOf(name)),
-            title: Text('Handmade'),
-            trailing: Text('${Clicker.records.numberOf(name)}'),
-            onTap: () {
-              setState(() => Clicker.records.increase(name)
-              );
-            }
-          );
-        }
-
-        if (i.isOdd) {
-          return Divider();
-        }
-        
-        return ListTile(
-          leading: Icon(Clicker.iconOf(name)),
-          title: Text('Developing!'),
-        );
-      },
-    );
-  }
-
-  Function _pushResourcePage(String name) {
-    return () {
-      Navigator.of(context).pushAndRemoveUntil(
-        MaterialPageRoute<void>(
-          builder: (BuildContext context) {
-            return Scaffold(
-              appBar: AppBar(
-                title: Row(
-                  children: <Widget>[
-                    Icon(Clicker.iconOf(name)),
-                    Text(' $name'),
-                  ],
-                ),
-              ),
-              body: _resourceBody(name),
-              floatingActionButton: ResourceColumn.without(name),
-            );
-          }
-        ), ModalRoute.withName('/'),
-      );
-    };
-  }
-  @override
-  void initState() {
-    super.initState();
-
-    timer = Timer.periodic(Duration(seconds: 1), (timer) {
-      setState(()=>{});
-    });
-  }
-  @override
-  void dispose() {
-    super.dispose();
-
-    timer.cancel();
-  }
-  @override
-  Widget build(BuildContext context) {
-    Clicker.names.where((x) => x != widget.excludedName).forEach((name) =>
-      _resourceButtonMap[name] = FloatingActionButton.extended(
-        heroTag: "btn${name}",
-        tooltip: name,
-        icon: Icon(Clicker.iconOf(name)),
-        label: Text('${Clicker.records.numberOf(name)}'),
-        onPressed: _pushResourcePage(name),
-      )
-    );
-
-    return Column(
-        mainAxisSize: MainAxisSize.min,
-        children: Clicker.names.where((x) => x != widget.excludedName).expand(
-          (name) => [
-            _resourceButtonMap[name],
-            SizedBox(height: 10),
-          ]).toList().cast<Widget>(),
     );
   }
 }
