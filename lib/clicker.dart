@@ -1,9 +1,11 @@
 library clicker;
 
 import 'dart:math';
+import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
+import 'package:localstorage/localstorage.dart';
 part 'src/clicker_record.dart';
 part 'src/clicker_bigint.dart';
 part 'src/clicker_increaser.dart';
@@ -24,4 +26,8 @@ class Clicker {
   static void schedule() {
     _increaser.harvest();
   }
+
+  static void save() => _Records().save();
+  static void load() => _Records().load();
+  static void clear() => _Records().clear();
 }

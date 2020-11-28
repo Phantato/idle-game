@@ -11,7 +11,7 @@ class ResourceColumn extends StatefulWidget {
 class _ResourceColumnState extends State<ResourceColumn> {
   var _resourceButtonMap = <String, Widget>{};
 
-  Function _pushMinerList(String name) {
+  Function _pushWorkerList(String name) {
     return () {
       Navigator.of(context).pushAndRemoveUntil(
         MaterialPageRoute<void>(builder: (BuildContext context) {
@@ -22,7 +22,7 @@ class _ResourceColumnState extends State<ResourceColumn> {
                 Text(' $name'),
               ]),
             ),
-            body: _MinerList(name: name),
+            body: _WorkerList(name: name),
             floatingActionButton: ResourceColumn.without(name),
           );
         }),
@@ -42,7 +42,7 @@ class _ResourceColumnState extends State<ResourceColumn> {
           builder: (context, value, child) => Text('$value'),
           valueListenable: Clicker.records.numberOf(name),
         ),
-        onPressed: _pushMinerList(name),
+        onPressed: _pushWorkerList(name),
       );
     });
 

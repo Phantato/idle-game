@@ -1,4 +1,5 @@
 import 'dart:async';
+import 'dart:html';
 import 'package:flutter/material.dart';
 import "package:clicker/clicker.dart";
 import 'package:clicker/clicker_ui.dart';
@@ -64,11 +65,35 @@ class _ClickerHomePageState extends State<ClickerHomePage>
     });
   }
 
+  Drawer _buildDrawer() {
+    return Drawer(
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: <Widget>[
+            TextButton(
+              child: Text('Save Progress'),
+              onPressed: Clicker.save,
+            ),
+            TextButton(
+              child: Text('Load Progress'),
+              onPressed: Clicker.load,
+            ),
+            TextButton(
+              child: Text('Clear Progress'),
+              onPressed: Clicker.clear,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(title: Text(widget.title)),
-      // drawer: Drawer(child: Center(child: Text('This is a drawer!'))),
+      drawer: _buildDrawer(),
       body: Center(
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,

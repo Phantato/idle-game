@@ -12,9 +12,12 @@ class _Increaser {
       _harvestTabel[name] = _BigInt.zero;
     });
   }
+  void clear() {
+    _harvestTabel.updateAll((key, value) => _BigInt.zero);
+  }
 
   void regist(String name, int index, _BigInt value) {
-    _harvestTabel[name] += _BigInt.from(BigInt.from(pow(10, index))) * value;
+    _harvestTabel[name] += _BigInt.from(pow(10, index)) * value;
   }
 
   void harvest() {
