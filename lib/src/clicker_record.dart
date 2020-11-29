@@ -3,10 +3,11 @@ part of clicker;
 class _Records {
   static final _record = _Records._internal();
 
-  var _resourceTabel = <String, ValueNotifier<_BigInt>>{};
-  var _workerListTabel = <String, List<ValueNotifier<_BigInt>>>{};
+  final _resourceTabel = <String, ValueNotifier<_BigInt>>{};
+  final _workerListTabel = <String, List<ValueNotifier<_BigInt>>>{};
   final _workerCostListTabel = <String, List<ValueNotifier<_BigInt>>>{};
   final LocalStorage _localStorage = LocalStorage('Clicker.json');
+  bool _justSaved = false;
 
   factory _Records() {
     return _record;
@@ -30,8 +31,9 @@ class _Records {
   List<ValueNotifier<_BigInt>> workerListOf(String name) =>
       _workerListTabel[name];
 
-  void save() async {
+  Future<bool> save() async {
     await _localStorage.ready;
+    if (_justSaved) return false;
     // print(_resourceTabel.map((key, value) => MapEntry(key, value.value)));
     _localStorage.setItem('resource',
         _resourceTabel.map((key, value) => MapEntry(key, value.value)));
@@ -39,7 +41,11 @@ class _Records {
         'worker',
         _workerListTabel.map(
             (key, list) => MapEntry(key, list.map((e) => e.value).toList())));
-    print('progressSaved!');
+    _justSaved = true;
+    Timer(Duration(seconds: 20), () {
+      _justSaved = false;
+    });
+    return true;
   }
 
   void load() async {
@@ -67,19 +73,12 @@ class _Records {
         Clicker._increaser.regist(name, index, value.value);
       });
     });
-    // print(_tmpResourceTabel['apple']['data'].runtimeType);
-    // _tmpResourceTabel.forEach((key, value) {
-    // _resourceTabel[key].value = _BigInt.parse(value['data']);
-    // });
-    // print(_resourceTabel);
-    // print(_tmpworkerListTabel);
-    // print(_tmpresourceTabel);
   }
 
   void clear() async {
     await _localStorage.ready;
     _localStorage.clear();
-    print('cleared!');
+    // print('cleared!');
   }
 
   void increase(String name) {

@@ -1,21 +1,23 @@
 library clicker;
 
+import 'dart:async';
 import 'dart:math';
-import 'dart:convert';
+// import 'dart:convert';
 
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/widgets.dart';
 import 'package:localstorage/localstorage.dart';
+import 'icon/clicker_icons.dart';
 part 'src/clicker_record.dart';
 part 'src/clicker_bigint.dart';
 part 'src/clicker_increaser.dart';
-part 'icon/clicker_icons.dart';
 
 class Clicker {
   static const _nameIconPair = {
-    'apple': _Icons.apple,
-    'gold': _Icons.gold_bar,
-    'beer': _Icons.beer,
+    'apple': Icons.apple,
+    'gold': Icons.gold_bar,
+    'beer': Icons.beer,
   };
 
   static get names => _nameIconPair.keys.toList();
@@ -27,7 +29,7 @@ class Clicker {
     _increaser.harvest();
   }
 
-  static void save() => _Records().save();
+  static Future<bool> save() async => _Records().save();
   static void load() => _Records().load();
   static void clear() => _Records().clear();
 }
