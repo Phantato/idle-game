@@ -7,14 +7,14 @@ import 'icon/clicker_icons.dart' as ClickerIcon;
 // import 'data/clicker_record.dart';
 
 Timer _timer;
-void main() {
+void main() async {
+  await Clicker.storageReady;
   runApp(ClickerApp());
 }
 
 class ClickerApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    Clicker.load();
     return MaterialApp(
       title: 'Clicker',
       theme: ThemeData(
@@ -135,13 +135,13 @@ class MainDrawer extends StatelessWidget {
               });
             },
           ),
-          ListTile(
-              leading: Icon(ClickerIcon.Icons.load),
-              title: Text('Load Progress'),
-              onTap: () {
-                Navigator.of(context).pop();
-                Clicker.load();
-              }),
+          // ListTile(
+          //     leading: Icon(ClickerIcon.Icons.load),
+          //     title: Text('Load Progress'),
+          //     onTap: () {
+          //       Navigator.of(context).pop();
+          //       Clicker.load();
+          //     }),
           ListTile(
             leading: Icon(ClickerIcon.Icons.bomb_explosion),
             title: Text('Clear Progress'),

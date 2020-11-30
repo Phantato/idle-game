@@ -6,11 +6,15 @@ class _BigInt {
   static _BigInt get zero => _BigInt.from(0);
   static _BigInt get one => _BigInt.from(1);
 
+  int get hashCode => _value.hashCode;
+  get toJson => _value.toString;
+
   _BigInt(this._value);
   _BigInt.from(num value) : _value = BigInt.from(value);
   _BigInt.parse(String s) : _value = BigInt.parse(s);
-  _BigInt.fromJson(Map<String, dynamic> json)
-      : _value = BigInt.parse(json['data']);
+  // _BigInt.fromJson(Map<String, dynamic> json)
+
+  // : _value = BigInt.parse(json['data']);
   // int get hashCode => _value.hashCode;
   String _generateUnit(int n) {
     String ret = '';
@@ -34,13 +38,18 @@ class _BigInt {
             _generateUnit(len ~/ 3);
   }
 
-  Map<String, dynamic> toJson() => {
-        'data': '$_value',
-      };
+  _BigInt timesTen() => this * _BigInt.from(10);
+  _BigInt timesThousand() => this * _BigInt.from(1000);
+  // Only support integer range pow
+  _BigInt pow(_BigInt other) => _BigInt(_value.pow(other._value.toInt()));
   _BigInt operator +(_BigInt other) => _BigInt(_value + other._value);
   _BigInt operator -(_BigInt other) => _BigInt(_value - other._value);
   _BigInt operator *(_BigInt other) => _BigInt(_value * other._value);
+  _BigInt operator /(_BigInt other) => _BigInt(_value ~/ other._value +
+      (_value % other._value == BigInt.zero ? BigInt.zero : BigInt.one));
+  _BigInt operator ~/(_BigInt other) => _BigInt(_value ~/ other._value);
   bool operator <(_BigInt other) => _value < other._value;
-  // @override
-  // bool operator ==(_BigInt other) => _value == other._value;
+  bool operator ==(Object other) =>
+      other is _BigInt ? _value == other._value : false;
+  bool operator <=(_BigInt other) => this < other || this == other;
 }

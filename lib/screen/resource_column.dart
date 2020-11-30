@@ -33,14 +33,16 @@ class _ResourceColumnState extends State<ResourceColumn> {
 
   @override
   Widget build(BuildContext context) {
-    Clicker.names.where((x) => x != widget.excludedName).forEach((String name) {
+    Clicker.resourceList
+        .where((x) => x != widget.excludedName)
+        .forEach((String name) {
       _resourceButtonMap[name] = FloatingActionButton.extended(
         heroTag: 'btn' + name,
         tooltip: name + '  ',
         icon: Icon(Clicker.iconOf(name)),
         label: ValueListenableBuilder(
           builder: (context, value, child) => Text('$value'),
-          valueListenable: Clicker.records.numberOf(name),
+          valueListenable: Clicker.numberOf(name),
         ),
         onPressed: _pushWorkerList(name),
       );
@@ -48,7 +50,7 @@ class _ResourceColumnState extends State<ResourceColumn> {
 
     return Column(
       mainAxisSize: MainAxisSize.min,
-      children: Clicker.names
+      children: Clicker.resourceList
           .where((x) => x != widget.excludedName)
           .expand((name) => [
                 _resourceButtonMap[name],

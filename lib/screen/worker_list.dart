@@ -18,49 +18,67 @@ class _WorkerListState extends State<_WorkerList> {
               // crossAxisAlignment: CrossAxisAlignment.baseline,
               // textBaseline: TextBaseline.alphabetic,
               children: <Widget>[
-                Text('Lazy worker'),
-                Expanded(
-                  child: Row(),
-                ),
                 Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
                   children: <Widget>[
-                    ValueListenableBuilder(
-                      builder: (context, value, child) => Text('Cost: $value'),
-                      valueListenable: Clicker.records
-                          .workerCostOfAt(widget.name, index - 1),
+                    Text('Worker Level $index'),
+                    Text(
+                      '+${Clicker.efficientOfAt(widget.name, index - 1)}/s',
+                      style: Theme.of(context).textTheme.bodyText2,
                     ),
-                    Text('+1/s'),
                   ],
                 ),
                 VerticalDivider(),
+                Text('Employment costs:'),
+                VerticalDivider(),
+                ValueListenableBuilder(
+                  builder: (context, value, child) =>
+                      // Expanded(child:
+                      // child: Center(
+                      Row(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: value
+                        .toMap()
+                        .entries
+                        .map((entry) => Column(
+                              children: <Widget>[
+                                Icon(Clicker.iconOf(entry.key)),
+                                Text('${entry.value}'),
+                              ],
+                            ))
+                        .toList()
+                        .cast<Widget>(),
+                    // ),
+                  ),
+                  // Text('${value.toMap().entries}'),
+                  // ListView.builder(
+                  //   shrinkWrap: true,
+                  //   // physics: ScrollPhysics(),
+                  //   itemCount: value.length,
+                  //   scrollDirection: Axis.horizontal,
+                  //   itemBuilder: (context, index) {
+                  //     return ListTile(title: Text('1'));
+                  //   },
+                  // ),
+                  valueListenable: Clicker.costOfAt(widget.name, index - 1),
+                ),
+                Expanded(child: Row()),
                 ValueListenableBuilder(
                   builder: (context, value, child) => Text('Current: $value'),
-                  valueListenable:
-                      Clicker.records.workerOfAt(widget.name, index - 1),
+                  valueListenable: Clicker.workerOfAt(widget.name, index - 1),
                 ),
               ],
             ),
             onTap: () {
-              if (Clicker.records.numberOf(widget.name).value <
-                  Clicker.records
-                      .workerCostOfAt(widget.name, index - 1)
-                      .value) {
-                if (!_snackBarAppeared) {
-                  Scaffold.of(context).showSnackBar(SnackBar(
-                    content: Text('Insufficient resource!'),
-                  ));
-                  _snackBarAppeared = true;
-                  Timer(Duration(seconds: 3), () {
-                    _snackBarAppeared = false;
-                  });
-                }
-              } else {
-                Clicker.records.decreaseBy(
-                    widget.name,
-                    Clicker.records
-                        .workerCostOfAt(widget.name, index - 1)
-                        .value);
-                Clicker.records.increaseWorkerOf(widget.name, index - 1);
+              if (!Clicker.employWorkerOfAt(widget.name, index - 1) &&
+                  !_snackBarAppeared) {
+                Scaffold.of(context).showSnackBar(SnackBar(
+                  content: Text('Insufficient resource!'),
+                ));
+                _snackBarAppeared = true;
+                Timer(Duration(seconds: 3), () {
+                  _snackBarAppeared = false;
+                });
               }
             },
           );
@@ -71,7 +89,7 @@ class _WorkerListState extends State<_WorkerList> {
     return Stack(
       children: <Widget>[
         ListView.separated(
-          itemCount: Clicker.records.workerListOf(widget.name).length + 1,
+          itemCount: Clicker.workerLengthOf(widget.name) + 1,
           itemBuilder: _itemBuild,
           separatorBuilder: (c, i) => Divider(
             thickness: 1,
@@ -82,17 +100,24 @@ class _WorkerListState extends State<_WorkerList> {
         ListTile(
           leading: Icon(Clicker.iconOf(widget.name)),
           title: Row(
+            // mainAxisSize: MainAxisSize.min,
             crossAxisAlignment: CrossAxisAlignment.baseline,
             textBaseline: TextBaseline.alphabetic,
             children: <Widget>[
-              Text('Handcraft'),
+              Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: <Widget>[
+                  Text('Handcraft'),
+                  Text(
+                    '+1/Tap',
+                    style: Theme.of(context).textTheme.bodyText2,
+                  ),
+                ],
+              ),
               Expanded(
                 child: Row(),
               ),
-              Text('+1/Tap'),
-              // VerticalDivider(
-              //   thickness: 0,
-              // ),
               SizedBox(
                 width: 16,
               ),
@@ -100,11 +125,11 @@ class _WorkerListState extends State<_WorkerList> {
                 builder: (context, value, child) {
                   return Text('Current: $value');
                 },
-                valueListenable: Clicker.records.numberOf(widget.name),
+                valueListenable: Clicker.numberOf(widget.name),
               ),
             ],
           ),
-          onTap: () => Clicker.records.increase(widget.name),
+          onTap: () => Clicker.increase(widget.name),
         ),
       ],
     );
