@@ -40,11 +40,12 @@ class _ResourceTabel {
     });
   }
 
-  Map<String, dynamic> toJson() =>
-      _resourceMap.map((name, notifier) => MapEntry(name, '${notifier.value}'));
+  Map<String, dynamic> toJson() => _resourceMap
+      .map((name, notifier) => MapEntry(name, notifier.value.toJson()));
 
   Future<bool> _save(LocalStorage storage) async {
     await storage.ready;
+    print(toJson());
     storage.setItem('resource', this);
     return true;
   }

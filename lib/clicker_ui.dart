@@ -1,6 +1,7 @@
 library clicker_ui;
 
 import 'dart:async';
+import 'dart:html';
 import 'package:flutter/material.dart';
 import 'package:clicker/clicker.dart';
 import 'icon/clicker_icons.dart';
