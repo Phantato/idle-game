@@ -1,0 +1,95 @@
+[[worker]]
+name = "food_ordinary"
+amount = [1]
+energy = 5
+[[worker.product]]
+    name = "food"
+    efficiency = [1]
+[[worker.requirements]]
+    name = "food"
+    amount = [1]
+    growth = [1]
+
+[[worker]]
+name = "food_apprentice"
+amount = [0]
+energy = 2
+[[worker.product]]
+    name = "food"
+    efficiency = [1]
+[[worker.requirements]]
+    name = "food"
+    amount = [5]
+    growth = [2]
+
+[[worker]]
+name = "wood_ordinary"
+amount = [1]
+energy = 5
+[[worker.product]]
+    name = "wood"
+    efficiency = [1]
+[[worker.requirements]]
+    name = "food"
+    amount = [1]
+    growth = [1]
+
+[[worker]]
+name = "wood_apprentice"
+amount = [0]
+energy = 2
+[[worker.product]]
+    name = "wood"
+    efficiency = [1]
+[[worker.requirements]]
+    name = "food"
+    amount = [5]
+    growth = [2]
+
+[[worker]]
+name = "stone_ordinary"
+amount = [1]
+energy = 5
+[[worker.product]]
+    name = "stone"
+    efficiency = [1]
+[[worker.requirements]]
+    name = "food"
+    amount = [1]
+    growth = [1]
+
+[[worker]]
+name = "food_apprentice"
+amount = [0]
+energy = 2
+[[worker.product]]
+    name = "stone"
+    efficiency = [1]
+[[worker.requirements]]
+    name = "food"
+    amount = [5]
+    growth = [2]
+
+[[worker]]
+name = "metal_ordinary"
+amount = [1]
+energy = 5
+[[worker.product]]
+    name = "metal"
+    efficiency = [1]
+[[worker.requirements]]
+    name = "food"
+    amount = [1]
+    growth = [1]
+
+[[worker]]
+name = "metal_apprentice"
+amount = [0]
+energy = 2
+[[worker.product]]
+    name = "metal"
+    efficiency = [1]
+[[worker.requirements]]
+    name = "food"
+    amount = [5]
+    growth = [2]

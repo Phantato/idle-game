@@ -1,7 +1,10 @@
+use std::collections::HashMap;
 use std::env;
 use std::fmt;
 use std::fs::File;
 use std::io::Read;
+
+pub type Page = std::ops::Range<usize>;
 
 extern crate serde;
 extern crate toml;
@@ -9,18 +12,14 @@ extern crate toml;
 use serde::de;
 
 use crate::resource;
-use resource::farmer::Farmer;
 use resource::resource::Resource;
-use std::collections::HashMap;
-
-
-static mut RESOURCE_CACHE: Option<Resource> = None;
+use resource::worker::{Worker, WorkerBasic};
 
 #[derive(Debug, Default)]
 pub struct ResourceCenter {
     names: Vec<String>,
-    resources: Vec<Resource>,
-    farmers: Vec<Vec<Farmer>>,
+    resources: HashMap<String, Resource>,
+    workers: Vec<Worker>,
 }
 impl ResourceCenter {
     pub fn load_from_config() -> ResourceCenter {
@@ -30,47 +29,58 @@ impl ResourceCenter {
         let mut bytes = Vec::new();
         file.read_to_end(&mut bytes).unwrap();
         let mut center: ResourceCenter = toml::from_slice(&bytes).unwrap();
-        center.names.iter().enumerate().for_each(|(i, name)| {
-            unsafe {
-                RESOURCE_CACHE = Some(center.resources[i].clone());
-            }
-            file = File::open(path.join(name.to_owned() + ".toml")).unwrap();
-            bytes.clear();
-            file.read_to_end(&mut bytes).unwrap();
-            let mut farmers: HashMap<String, Vec<Farmer>> = toml::from_slice(&bytes).unwrap();
-            let mut farmers = farmers.remove("farmer").unwrap();
-            // farmers
-            //     .iter_mut()
-            //     .for_each(|farmer| farmer.set_resource(&center.resources[i]));
-            center.farmers.push(farmers);
-        });
-        unsafe {RESOURCE_CACHE = None;}
+        let mut file = File::open(path.join("worker.toml")).unwrap();
+        let mut bytes = Vec::new();
+        file.read_to_end(&mut bytes).unwrap();
+        let mut workers: HashMap<String, Vec<WorkerBasic>> = toml::from_slice(&bytes).unwrap();
+        let mut worker = workers.remove("worker").unwrap();
+        let wo: Vec<Worker> = worker
+            .drain(..)
+            .map(|worker| Worker::new(worker, &center))
+            .collect();
+        center.workers = wo;
+        // center.workers = workers
+        //     .remove("worker")
+        //     .unwrap()
+        //     .drain(..)
+        //     .map(|worker| Worker::new(worker, &center))
+        //     .collect();
         center
     }
 
-    pub(super) fn current_resource() -> Resource {
-        unsafe { RESOURCE_CACHE.clone().unwrap() }
+    pub(crate) fn get_resource(&self, name: &String) -> Resource {
+        self.resources[name].clone()
     }
 
     pub fn main(&mut self) {
-        self.farmers
-            .iter_mut()
-            .flatten()
-            .for_each(|farmer| farmer.charge());
+        self.workers.iter_mut().for_each(|worker| worker.charge());
     }
-    pub fn print(&self) {
-        self.names
+    pub fn print_resources(&self) {
+        self.resources
             .iter()
-            .zip(self.resources.iter())
-            .for_each(|(n, r)| print!("{}: {}\n\r", n, r))
+            .for_each(|(k, v)| print!("{}: {}\n\r", k, v))
+    }
+    pub fn total_workers_pages(&self, step: usize) -> usize {
+        (self.workers.len() - 1) / step + 1
+    }
+    pub fn print_workers(&self, page: Page) {
+        self.workers[page].iter().enumerate().for_each(|(i, w)| {
+            print!("{}:\t{}", i, w);
+        });
+    }
+    pub fn employ_worker(&mut self, index: usize, page: Page) -> bool {
+        if page.end - page.start > index {
+            self.workers[page][index].try_increase(&self.resources)
+        } else {
+            false
+        }
     }
 }
 
 impl fmt::Display for ResourceCenter {
     fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
-        self.names
+        self.resources
             .iter()
-            .zip(self.resources.iter())
             .for_each(|(name, resource)| writeln!(f, "{}: {}", name, resource).unwrap());
         Ok(())
     }
@@ -91,7 +101,8 @@ impl<'de> de::Visitor<'de> for ResourceCenterVisitor {
         let mut state = ResourceCenter::default();
         while let Some((key, value)) = access.next_entry::<String, Vec<i32>>()? {
             state.names.push(key);
-            state.resources.push(value.into());
+            let key = state.names.last().unwrap();
+            state.resources.insert(key.to_string(), value.into());
         }
 
         Ok(state)

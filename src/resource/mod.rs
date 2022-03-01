@@ -1,7 +1,7 @@
-mod farmer;
+pub mod worker;
 mod manager;
-mod requirement;
+pub mod requirement;
 mod resource;
 
 pub use manager::ResourceCenter;
-
+pub use manager::Page;
